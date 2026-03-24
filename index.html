@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Invoice Generator</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Invoice Generator</h1>
+
+<div class="form">
+
+<label>Customer Name</label>
+<input type="text"
+id="customerName"
+list="customerList">
+
+<datalist id="customerList">
+</datalist>
+
+<label>Date</label>
+<input type="date" id="date">
+
+<label>Jam:</label>
+<input type="time" id="time">
+
+<label>Invoice Number</label>
+<input type="text" id="invoiceNo">
+
+<hr>
+
+<h3>Add Item</h3>
+
+<label>Durasi Video (menit)</label>
+
+<input 
+type="number" 
+id="videoMinute" 
+placeholder="Contoh: 3"
+min="1"
+>
+
+<input 
+type="number" 
+id="qty" 
+placeholder="Qty"
+value="1"
+min="1"
+>
+
+<label>Discount Item (Rp)</label>
+
+<input 
+type="number" 
+id="itemDiscount"
+value="0"
+min="0"
+>
+
+<button onclick="addItem()">Add Item</button>
+
+<br><br>
+
+<label>Status</label>
+
+<select id="status">
+
+<option>Paid</option>
+<option>Unpaid</option>
+
+</select>
+
+<br><br>
+
+<label>QR Payment Text</label>
+
+<input type="text" id="qrText"
+placeholder="Isi nomor rekening / QRIS">
+
+<br><br>
+
+<button onclick="generateInvoice()">
+Generate Invoice
+</button>
+
+<button onclick="downloadPDF()">
+Download PDF
+</button>
+
+</div>
+
+<hr>
+
+<div id="invoice">
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
