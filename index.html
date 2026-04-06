@@ -17,6 +17,35 @@
 
 <body>
 
+<!-- LOGIN SCREEN -->
+
+<div id="loginScreen">
+
+<h2>🔐 Akses Invoice Generator</h2>
+
+<input 
+type="password"
+id="passwordInput"
+placeholder="Masukkan Password">
+
+<br><br>
+
+<button onclick="checkPassword()">
+Masuk
+</button>
+
+<p id="loginError"
+style="color:red; display:none;">
+Password salah!
+</p>
+
+</div>
+
+
+<!-- MAIN CONTENT (ISI WEBSITE) -->
+
+<div id="mainContent" style="display:none;">
+
 <h1>Invoice Generator</h1>
 
 <div class="form">
@@ -105,6 +134,9 @@ Download PDF
 <div id="invoice">
 
 </div>
+
+</div>
+
 
 <script src="script.js"></script>
 

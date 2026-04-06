@@ -1,4 +1,33 @@
 // ===============================
+// PASSWORD LOGIN
+// ===============================
+
+const correctPassword = "fadhil2026"; 
+// GANTI password di sini kalau mau
+
+function checkPassword() {
+
+let input =
+document.getElementById("passwordInput").value;
+
+if (input === correctPassword) {
+
+document.getElementById("loginScreen").style.display = "none";
+
+document.getElementById("mainContent").style.display = "block";
+
+sessionStorage.setItem("isLoggedIn", "true");
+
+} else {
+
+document.getElementById("loginError").style.display = "block";
+
+}
+
+}
+
+
+// ===============================
 // CONFIG
 // ===============================
 
@@ -63,7 +92,6 @@ return `INV-${year}-${number}`;
 // TAMBAH ITEM
 // ===============================
 
-
 function addItem() {
 
 let minute =
@@ -82,6 +110,7 @@ document.getElementById("itemDiscount").value
 );
 
 // VALIDASI
+
 if (!minute || minute <= 0) {
 
 alert("Masukkan durasi video!");
@@ -99,12 +128,13 @@ return;
 }
 
 // HARGA DIKUNCI
+
 let pricePerMinute = 100000;
 
 let price =
 minute * pricePerMinute;
 
-// HITUNG TOTAL ITEM
+// HITUNG
 
 let subtotalItem =
 price * qty;
@@ -119,6 +149,7 @@ total = 0;
 }
 
 // NAMA ITEM
+
 let name =
 `Video ${minute} menit`;
 
@@ -132,10 +163,15 @@ total
 
 });
 
-// reset input
+// RESET INPUT
+
 document.getElementById("videoMinute").value = "";
+
 document.getElementById("qty").value = 1;
+
 document.getElementById("itemDiscount").value = 0;
+
+// UPDATE
 
 generateInvoice();
 
@@ -150,7 +186,8 @@ function editItem(index) {
 
 let item = items[index];
 
-// ambil menit
+// AMBIL MENIT
+
 let minute =
 item.name.match(/\d+/)[0];
 
@@ -161,9 +198,10 @@ document.getElementById("qty").value =
 item.qty;
 
 document.getElementById("itemDiscount").value =
-item.discount || 0;
+item.DISCOUNT || 0;
 
-// hapus lama
+// HAPUS LAMA
+
 items.splice(index,1);
 
 generateInvoice();
@@ -215,29 +253,19 @@ paidTime = paidTimeInput.value;
 }
 
 
-// DISCOUNT
-
-let discountInput =
-document.getElementById("discount");
-
-let discount = 0;
-
-if (discountInput) {
-
-discount =
-Number(discountInput.value) || 0;
-
-}
-
-
-let invoiceNo =
-document.getElementById("invoiceNo").value;
+// STATUS
 
 let status =
 document.getElementById("status").value;
 
 let qrText =
 document.getElementById("qrText").value;
+
+let invoiceNo =
+document.getElementById("invoiceNo").value;
+
+
+// STYLE STATUS
 
 let statusClass =
 status === "Paid"
@@ -253,6 +281,11 @@ let watermarkClass =
 status === "Paid"
 ? "watermark-paid"
 : "watermark-unpaid";
+
+
+// ===============================
+// HTML
+// ===============================
 
 let html = `
 
@@ -324,7 +357,6 @@ ${company}
 <th>Discount</th>
 <th>Total</th>
 
-
 </tr>
 
 `;
@@ -339,13 +371,11 @@ html += `
 
 <td class="action-col">
 
-<button onclick="editItem(${index})"
-title="ada yang salah cok, edit dulu dah, KAMBING EMANG">
+<button onclick="editItem(${index})">
 ✏️
 </button>
 
-<button onclick="deleteItem(${index})"
-title="Hapus aja cok, ngga jadi pesanan yang ini anjing">
+<button onclick="deleteItem(${index})">
 ❌
 </button>
 
@@ -361,7 +391,6 @@ title="Hapus aja cok, ngga jadi pesanan yang ini anjing">
 
 <td>${formatRupiah(item.total)}</td>
 
-
 </tr>
 
 `;
@@ -371,17 +400,9 @@ subtotal += item.total;
 });
 
 
-// HITUNG TOTAL
-
-let finalTotal =
-subtotal - discount;
-
-if (finalTotal < 0) {
-
-finalTotal = 0;
-
-}
-
+// ===============================
+// TOTAL
+// ===============================
 
 html += `
 
@@ -401,7 +422,7 @@ ${formatRupiah(subtotal)}
 <td><b>Total</b></td>
 <td>:</td>
 <td style="text-align:right; font-weight:bold;">
-${formatRupiah(finalTotal)}
+${formatRupiah(subtotal)}
 </td>
 </tr>
 
@@ -454,20 +475,39 @@ qrText
 
 
 // ===============================
-// LOAD AWAL
+// LOAD AWAL (FIX LOGIN + INIT)
 // ===============================
 
-window.onload = function() {
+window.addEventListener("load", function () {
+
+// LOGIN CHECK
+
+if (sessionStorage.getItem("isLoggedIn") === "true") {
+
+document.getElementById("loginScreen").style.display = "none";
+
+document.getElementById("mainContent").style.display = "block";
+
+}
+
+// INVOICE NUMBER
 
 let invoiceInput =
 document.getElementById("invoiceNo");
 
+if (invoiceInput) {
+
 invoiceInput.value =
 generateInvoiceNumber();
 
+}
+
+// LOAD CUSTOMER
+
 loadCustomers();
 
-};
+});
+
 
 // ===============================
 // CUSTOMER STORAGE
@@ -494,7 +534,6 @@ JSON.stringify(customers)
 }
 
 }
-
 
 
 function loadCustomers() {
@@ -524,8 +563,9 @@ datalist.appendChild(option);
 
 }
 
+
 // ===============================
-// DOWNLOAD PDF (FIX)
+// DOWNLOAD PDF
 // ===============================
 
 function downloadPDF() {
@@ -541,9 +581,7 @@ return;
 
 }
 
-// ======================
 // SEMBUNYIKAN ACTION
-// ======================
 
 let actionColumns =
 invoiceElement.querySelectorAll(".action-col");
@@ -553,10 +591,6 @@ actionColumns.forEach(col => {
 col.style.display = "none";
 
 });
-
-// ======================
-// BUAT PDF
-// ======================
 
 html2canvas(
 invoiceElement,
@@ -578,7 +612,6 @@ new jspdf.jsPDF(
 );
 
 const pageWidth = 297;
-const pageHeight = 210;
 
 const imgWidth = pageWidth;
 
@@ -586,46 +619,18 @@ const imgHeight =
 (canvas.height * imgWidth)
 / canvas.width;
 
-let heightLeft = imgHeight;
-
-let position = 0;
-
 pdf.addImage(
 imgData,
 'PNG',
 0,
-position,
-imgWidth,
-imgHeight
-);
-
-heightLeft -= pageHeight;
-
-while (heightLeft > 0) {
-
-position =
-heightLeft - imgHeight;
-
-pdf.addPage();
-
-pdf.addImage(
-imgData,
-'PNG',
 0,
-position,
 imgWidth,
 imgHeight
 );
-
-heightLeft -= pageHeight;
-
-}
 
 pdf.save("invoice.pdf");
 
-// ======================
 // KEMBALIKAN ACTION
-// ======================
 
 actionColumns.forEach(col => {
 
